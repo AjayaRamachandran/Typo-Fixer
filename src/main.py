@@ -48,13 +48,13 @@ def generateFrequencies():
   perLengthScore = 0
   listOfFrequencies = []
   for item in wordlist:
-    letterInWord = 0
+    letterInWord = -1
     wordScore = 0
     perLengthScore = 0
     for letter in item:
       letterInWord += 1
       if letter in lastTypedWord:
-        if lastTypedWord[letterInWord - 1] == item[letterInWord - 1]:
+        if lastTypedWord[letterInWord] == item[letterInWord]:
           wordScore += 3
         else:
           wordScore += 1
