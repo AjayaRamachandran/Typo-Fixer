@@ -41,25 +41,28 @@ def listify():
   for line in words:
     individualWord = line.strip()
     wordlist.append(individualWord)
+  #print(wordlist)
 
 def generateFrequencies():
-  global lastTypedWord, perLengthScore, listOfTypedWords, wordlist, listOfFrequencies
+  global lastTypedWord, perLengthScore, listOfTypedWords, wordlist, listOfFrequencies, letterInWord
   lastTypedWord = listOfTypedWords[len(listOfTypedWords) - 1]
   perLengthScore = 0
   listOfFrequencies = []
   for item in wordlist:
-    letterInWord = -1
+    letterInWord = 0
     wordScore = 0
     perLengthScore = 0
-    for letter in item:
-      letterInWord += 1
-      if letter in lastTypedWord:
-        if lastTypedWord[letterInWord] == item[letterInWord]:
-          wordScore += 3
-        else:
-          wordScore += 1
     if len(item) == len(lastTypedWord):
-      perLengthScore = wordScore / len(item)
+      for letter in item:
+        #print("LetterInWord", letterInWord, lastTypedWord[letterInWord], item[letterInWord])
+        #print("WordScore", wordScore)
+        if letter in lastTypedWord:
+          if lastTypedWord[letterInWord] == item[letterInWord]:
+            wordScore += 3
+          else:
+            wordScore += 1
+        letterInWord += 1
+      perLengthScore = wordScore / len(item)       
     else:
       perLengthScore = 0
     listOfFrequencies.append(perLengthScore)
