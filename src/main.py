@@ -36,31 +36,46 @@ def writeInput():
   
 
 def listify():
+  global wordlist
   wordlist = []
   for line in words:
     individualWord = line.strip()
     wordlist.append(individualWord)
 
 def generateFrequencies():
-  global lastTypedWord, perLengthScore
+  global lastTypedWord, perLengthScore, listOfTypedWords, wordlist, listOfFrequencies
   lastTypedWord = listOfTypedWords[len(listOfTypedWords) - 1]
   perLengthScore = 0
+  listOfFrequencies = []
   for item in wordlist:
+    letterInWord = 0
     wordScore = 0
     perLengthScore = 0
     for letter in item:
+      letterInWord += 1
       if letter in lastTypedWord:
-        wordScore += 1
+        if lastTypedWord[letterInWord - 1] == item[letterInWord - 1]:
+          wordScore += 3
+        else:
+          wordScore += 1
     if len(item) == len(lastTypedWord):
       perLengthScore = wordScore / len(item)
     else:
       perLengthScore = 0
     listOfFrequencies.append(perLengthScore)
-  print(listOfFrequencies)
+  #print(listOfFrequencies)
+
+def findHighestWord():
+  global wordlist, listOfFrequencies, highestScore
+  highestScore = 0
+  for item in listOfFrequencies:
+    if item > highestScore:
+      highestScore = item
+  print(wordlist[listOfFrequencies.index(highestScore)])
 
 
 def wordBreakup():
-  global currentWord
+  global currentWord, listOfTypedWords
   currentWord = ""
   wordCount = 1
   listOfTypedWords = []
@@ -81,12 +96,12 @@ def printInput():
   #  print("")
   #print(currentInput)
   wordBreakup()
-  if len(listOfTypedWords) > 0:
+  if len(listOfTypedWords) > 0 and currentInput[len(currentInput) - 1] == " ":
     generateFrequencies()
+    findHighestWord()
   writeInput()
 
 listify()
-
 
 # Key Inputs
 
