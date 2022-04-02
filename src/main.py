@@ -8,10 +8,13 @@ matches = []
 
 wordCount = 0
 currentWord = ""
-listOfWords = []
+listOfTypedWords = []
 
 currentInput = ""
 currentInputLetter = ""
+
+lastTypedWord = ""
+listOfFrequencies = []
 
 wn = trtl.Screen()
 wn.title("Typing Corrector")
@@ -38,24 +41,38 @@ def listify():
     individualWord = line.strip()
     wordlist.append(individualWord)
 
-def sift():
-  matches = []
+def generateFrequencies():
+  global lastTypedWord, perLengthScore
+  lastTypedWord = listOfTypedWords[len(listOfTypedWords) - 1]
+  perLengthScore = 0
   for item in wordlist:
-    if currentInput in wordlist[item]:
-      matches.append(wordlist[item])
+    wordScore = 0
+    perLengthScore = 0
+    for letter in item:
+      if letter in lastTypedWord:
+        wordScore += 1
+    if len(item) == len(lastTypedWord):
+      perLengthScore = wordScore / len(item)
+    else:
+      perLengthScore = 0
+    listOfFrequencies.append(perLengthScore)
+  print(listOfFrequencies)
+
 
 def wordBreakup():
+  global currentWord
   currentWord = ""
   wordCount = 1
-  listOfWords = []
+  listOfTypedWords = []
   for letter in currentInput:
-    currentWord =  " ".join([currentWord, letter])
     #currentWord = str(currentWord) + str(currentInput[letter])
     if letter == " ":
-      listOfWords.append(currentWord)
+      listOfTypedWords.append(currentWord)
       currentWord = ""
       wordCount += 1
-  print(listOfWords)
+    else:
+      currentWord =  "".join([currentWord, letter])
+  print(listOfTypedWords)
 
 
 
@@ -64,8 +81,11 @@ def printInput():
   #  print("")
   #print(currentInput)
   wordBreakup()
-  sift()
+  if len(listOfTypedWords) > 0:
+    generateFrequencies()
   writeInput()
+
+listify()
 
 
 # Key Inputs
