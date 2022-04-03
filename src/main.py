@@ -1,7 +1,10 @@
 # Import
 import turtle as trtl
 
-words = open("wordlist.txt")
+words = open("wordlist.txt") # Imports the .txt file
+
+# Setup
+
 wordlist = []
 matches = []
 
@@ -16,21 +19,18 @@ correctedWord = ""
 lastTypedWord = ""
 listOfFrequencies = []
 
+# Turtle Setup
+
 wn = trtl.Screen()
 wn.title("Typing Corrector")
-wn.tracer(False)
-
-# Setup
+wn.tracer(False) # Keeps screen updates instant
 
 text = trtl.Turtle()
 text.hideturtle()
 
-
-
-
 # Functions
 
-def writeInput():
+def writeInput(): # Displays any necessary information on the screen.
   text.clear()
   text.goto(0,0)
   text.write(currentInput, align="center", font=("Segoe UI", 20, "normal"))
@@ -38,66 +38,61 @@ def writeInput():
     text.goto(0,-50)
     message = "Correct " + lastTypedWord + " to " + correctedWord + "?"
     text.write(message, align="center", font=("Segoe UI", 15, "normal"))
+    text.goto(0, -80)
+    text.write("Click anywhere to accept.", align="center", font=("Segoe UI", 13, "normal"))
 
-def listify():
+def listify(): # Imports the .txt file and converts it to a list, from which it can pull values.
   global wordlist
   wordlist = []
   for line in words:
     individualWord = line.strip()
     wordlist.append(individualWord)
-  #print(wordlist)
 
-def generateFrequencies():
+def generateFrequencies(): # Creates a parallel list with weights for every word in the wordlist
   global lastTypedWord, perLengthScore, listOfTypedWords, wordlist, listOfFrequencies, letterInWord
   lastTypedWord = listOfTypedWords[len(listOfTypedWords) - 1]
   perLengthScore = 0
   listOfFrequencies = []
-  for item in wordlist:
+  for item in wordlist: # Loops through every word in the wordlist
     letterInWord = 0
     wordScore = 0
     perLengthScore = 0
     if len(item) == len(lastTypedWord):
-      for letter in item:
-        #print("LetterInWord", letterInWord, lastTypedWord[letterInWord], item[letterInWord])
-        #print("WordScore", wordScore)
-        if letter in lastTypedWord:
-          if lastTypedWord[letterInWord] == item[letterInWord]:
-            wordScore += 3
+      for letter in item: # Loops through every letter in the item
+        if letter in lastTypedWord: # Checks if the letter is also in the user-typed word
+          if lastTypedWord[letterInWord] == item[letterInWord]: # If above is true, checks if the letter is in the same spot
+            wordScore += 3 # If in the same spot, the word is weighted more
           else:
-            wordScore += 1
+            wordScore += 1 # If not in the same spot, the word is weighted less
         letterInWord += 1
       perLengthScore = wordScore / len(item)       
     else:
       perLengthScore = 0
-    listOfFrequencies.append(perLengthScore)
-  #print(listOfFrequencies)
+    listOfFrequencies.append(perLengthScore) # Appends the weight to the list of weights
 
-def findHighestWord():
+def findHighestWord(): # Runs through the weight list to find the item with the highest weight, finds the corresponding word
   global wordlist, listOfFrequencies, highestScore, correctedWord
   highestScore = 0
   for item in listOfFrequencies:
     if item > highestScore:
       highestScore = item
   correctedWord = wordlist[listOfFrequencies.index(highestScore)]
-  print(correctedWord)
 
 
-def wordBreakup():
+def wordBreakup(): # Breaks up the user input string into a list of words
   global currentWord, listOfTypedWords
   currentWord = ""
   wordCount = 1
   listOfTypedWords = []
   for letter in currentInput:
-    #currentWord = str(currentWord) + str(currentInput[letter])
-    if letter == " ":
+    if letter == " ": # Creates a new word if the current letter is a space
       listOfTypedWords.append(currentWord)
       currentWord = ""
       wordCount += 1
     else:
       currentWord =  "".join([currentWord, letter])
-  print(listOfTypedWords)
 
-def changeWord(x,y):
+def changeWord(x,y): # Changes the wrong word to the correct one
   global listOfTypedWords, correctedWord, lastTypedWord, currentInput
   lastTypedWord = listOfTypedWords.pop()
   listOfTypedWords.append(correctedWord)
@@ -106,21 +101,18 @@ def changeWord(x,y):
   currentInput = currentInput + " "
   writeInput()
 
-def printInput():
-  #for i in range(10):
-  #  print("")
-  #print(currentInput)
+def printInput(): # Master function that controls the calling of other functions
   wordBreakup()
-  if len(listOfTypedWords) > 0 and currentInput[len(currentInput) - 1] == " ":
+  if len(listOfTypedWords) > 0 and currentInput[len(currentInput) - 1] == " ": # Only calls these if a word has just been completed
     generateFrequencies()
     findHighestWord()
   writeInput()
 
 listify()
 
-# Key Inputs
+# Key Input Functions
 
-wn.listen()
+wn.listen() # Allows the program to check for key inputs
 
 def aPressed():
   global currentInput
@@ -265,7 +257,7 @@ def bkspcPressed():
   currentInput = tempInput
   printInput()
 
-
+# Raw Key Inputs
 
 wn.onkeypress(aPressed, "a")
 
@@ -326,7 +318,6 @@ wn.onkeypress(bkspcPressed, "Left")
 trtl.onscreenclick(changeWord)
 
 
-wn.mainloop()
+# Mainloop
 
-
-
+wn.mainloop() # Keeps the screen persistent
