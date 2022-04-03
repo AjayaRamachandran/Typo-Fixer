@@ -1,5 +1,4 @@
 # Import
-
 import turtle as trtl
 
 words = open("wordlist.txt")
@@ -12,6 +11,7 @@ listOfTypedWords = []
 
 currentInput = ""
 currentInputLetter = ""
+correctedWord = ""
 
 lastTypedWord = ""
 listOfFrequencies = []
@@ -32,8 +32,12 @@ text.hideturtle()
 
 def writeInput():
   text.clear()
+  text.goto(0,0)
   text.write(currentInput, align="center", font=("Segoe UI", 20, "normal"))
-  
+  if correctedWord != lastTypedWord:
+    text.goto(0,-50)
+    message = "Correct " + lastTypedWord + " to " + correctedWord + "?"
+    text.write(message, align="center", font=("Segoe UI", 15, "normal"))
 
 def listify():
   global wordlist
@@ -69,12 +73,13 @@ def generateFrequencies():
   #print(listOfFrequencies)
 
 def findHighestWord():
-  global wordlist, listOfFrequencies, highestScore
+  global wordlist, listOfFrequencies, highestScore, correctedWord
   highestScore = 0
   for item in listOfFrequencies:
     if item > highestScore:
       highestScore = item
-  print(wordlist[listOfFrequencies.index(highestScore)])
+  correctedWord = wordlist[listOfFrequencies.index(highestScore)]
+  print(correctedWord)
 
 
 def wordBreakup():
@@ -92,7 +97,14 @@ def wordBreakup():
       currentWord =  "".join([currentWord, letter])
   print(listOfTypedWords)
 
-
+def changeWord(x,y):
+  global listOfTypedWords, correctedWord, lastTypedWord, currentInput
+  lastTypedWord = listOfTypedWords.pop()
+  listOfTypedWords.append(correctedWord)
+  lastTypedWord = correctedWord
+  currentInput = " ".join(listOfTypedWords)
+  currentInput = currentInput + " "
+  writeInput()
 
 def printInput():
   #for i in range(10):
@@ -310,6 +322,8 @@ wn.onkeypress(zPressed, "z")
 wn.onkeypress(spacePressed, "space")
 
 wn.onkeypress(bkspcPressed, "Left")
+
+trtl.onscreenclick(changeWord)
 
 
 wn.mainloop()
