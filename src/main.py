@@ -3,7 +3,7 @@ import turtle as trtl
 
 words = open("wordlist.txt") # Imports the .txt file
 
-# Setup
+# Variables Setup
 
 wordlist = []
 matches = []
@@ -33,20 +33,20 @@ text.hideturtle()
 def writeInput(): # Displays any necessary information on the screen.
   text.clear()
   text.goto(0,0)
-  text.write(currentInput, align="center", font=("Segoe UI", 20, "normal"))
+  text.write(currentInput, align="center", font=("Segoe UI", 25, "normal"))
   if correctedWord != lastTypedWord:
     text.goto(0,-50)
     message = "Correct " + lastTypedWord + " to " + correctedWord + "?"
-    text.write(message, align="center", font=("Segoe UI", 15, "normal"))
+    text.write(message, align="center", font=("Segoe UI", 17, "normal"))
     text.goto(0, -80)
-    text.write("Click anywhere to accept.", align="center", font=("Segoe UI", 13, "normal"))
+    text.write("Click anywhere to accept.", align="center", font=("Segoe UI", 14, "normal"))
 
 def listify(): # Imports the .txt file and converts it to a list, from which it can pull values.
   global wordlist
   wordlist = []
   for line in words:
     individualWord = line.strip()
-    wordlist.append(individualWord)
+    wordlist.append(individualWord) # This function was taken with permission from github user Ethan-Francolla
 
 def generateFrequencies(): # Creates a parallel list with weights for every word in the wordlist
   global lastTypedWord, perLengthScore, listOfTypedWords, wordlist, listOfFrequencies, letterInWord
