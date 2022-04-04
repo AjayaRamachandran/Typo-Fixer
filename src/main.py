@@ -105,9 +105,10 @@ def changeWord(x,y): # Changes the wrong word to the correct one
   writeInput()
 
 def printInput(): # Master function that controls the calling of other functions
-  global correctedWord, lastTypedWord
+  global correctedWord, lastTypedWord, listOfTypedWords
   wordBreakup()
   if len(listOfTypedWords) > 0 and currentInput[len(currentInput) - 1] == " ": # Only calls these if a word has just been completed
+    lastTypedWord = listOfTypedWords[len(listOfTypedWords) - 1]
     if lastTypedWord in wordlist:
       correctedWord = lastTypedWord
     else:
