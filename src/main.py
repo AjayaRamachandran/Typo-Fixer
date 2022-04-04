@@ -57,7 +57,9 @@ def generateFrequencies(): # Creates a parallel list with weights for every word
     letterInWord = 0
     wordScore = 0
     perLengthScore = 0
-    if abs(len(item) - len(lastTypedWord)) < 2:
+    if abs(len(item) - len(lastTypedWord)) < 2: # Allows word corrections to be a maximum length of 1 letter off above or below
+      if len(item) == len(lastTypedWord):
+        wordScore += 4 # Even though other lengths are allowed, same length corrections are favored
       for letter in item: # Loops through every letter in the item
         if letterInWord < len(lastTypedWord):
           if letter in lastTypedWord: # Checks if the letter is also in the user-typed word
@@ -103,10 +105,14 @@ def changeWord(x,y): # Changes the wrong word to the correct one
   writeInput()
 
 def printInput(): # Master function that controls the calling of other functions
+  global correctedWord, lastTypedWord
   wordBreakup()
   if len(listOfTypedWords) > 0 and currentInput[len(currentInput) - 1] == " ": # Only calls these if a word has just been completed
-    generateFrequencies()
-    findHighestWord()
+    if lastTypedWord in wordlist:
+      correctedWord = lastTypedWord
+    else:
+      generateFrequencies()
+      findHighestWord()
   writeInput()
 
 listify()
