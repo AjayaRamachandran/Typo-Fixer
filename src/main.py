@@ -59,11 +59,12 @@ def generateFrequencies(): # Creates a parallel list with weights for every word
     perLengthScore = 0
     if abs(len(item) - len(lastTypedWord)) < 2:
       for letter in item: # Loops through every letter in the item
-        if letter in lastTypedWord: # Checks if the letter is also in the user-typed word
-          if lastTypedWord[letterInWord] == item[letterInWord]: # If above is true, checks if the letter is in the same spot
-            wordScore += 3 # If in the same spot, the word is weighted more
-          else:
-            wordScore += 1 # If not in the same spot, the word is weighted less
+        if letterInWord < len(lastTypedWord):
+          if letter in lastTypedWord: # Checks if the letter is also in the user-typed word
+            if lastTypedWord[letterInWord] == item[letterInWord]: # If above is true, checks if the letter is in the same spot
+              wordScore += 3 # If in the same spot, the word is weighted more
+            else:
+              wordScore += 1 # If not in the same spot, the word is weighted less
         letterInWord += 1
       perLengthScore = wordScore / len(item)       
     else:
